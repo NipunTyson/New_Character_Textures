@@ -8,9 +8,12 @@ public class BoundingBox : MonoBehaviour {
     Rect currBox = new Rect();
     Rect photoRect = new Rect();
     bool showBox = true;
+    Mesh mesh;
+    Vector3[] vertices;
 
     void Start() {
         cam = Camera.main;
+        
     }
 
     void OnGUI() {
@@ -40,8 +43,29 @@ public class BoundingBox : MonoBehaviour {
         }
 
         showBox = visualize;
-        
-        Vector3[] verts = MeshUtility.GetMesh(transform).vertices;
+
+
+
+        var MeshFilterChecker = this.GetComponent<MeshFilter>();
+        var SkinnedMeshChecker = this.GetComponent<SkinnedMeshRenderer>();
+        if (MeshFilterChecker != null)
+        {
+            Debug.Log("this is MeshFilter");
+            mesh = GetComponent<MeshFilter>().mesh;
+        }
+
+        if (SkinnedMeshChecker != null)
+        {
+            Debug.Log("this is SkinnedMesh");
+            mesh = GetComponent<SkinnedMeshRenderer>().sharedMesh;
+        }
+
+
+
+        //mesh = GetComponent<MeshFilter>().mesh;
+        // mesh = GetComponent<SkinnedMeshRenderer>().sharedMesh;
+        Vector3[] verts = mesh.vertices;
+        //Vector3[] verts = MeshUtility.GetMesh(transform).vertices;
 
         //convert to world point, then screen space
         for (int i = 0; i < verts.Length; i++) {
